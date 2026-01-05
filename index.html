@@ -730,6 +730,32 @@
 
     <div id="toast-container"></div>
 
+    <!-- In-App Browser Warning Modal -->
+    <div id="inAppModal" class="fixed inset-0 bg-pink-950/90 z-[200] hidden items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white rounded-[30px] max-w-sm w-full p-8 text-center shadow-2xl border-4 border-pink-200 relative">
+            <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-500 text-3xl animate-bounce">
+                <i class="fa-regular fa-compass"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-pink-500 mb-4 tracking-tight">Open in Browser</h3>
+            <p class="text-pink-400 text-sm mb-6 leading-relaxed font-medium">
+                For the best magical experience, please open this page in external browser.
+            </p>
+            <div class="bg-pink-50 rounded-2xl p-4 mb-6 text-left space-y-3">
+                <div class="flex items-center gap-3 text-pink-400 text-xs font-bold">
+                    <span class="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">1</span>
+                    <span>Tap the menu icon <i class="fa-solid fa-ellipsis-vertical mx-1"></i> or <i class="fa-solid fa-share-from-square mx-1"></i></span>
+                </div>
+                <div class="flex items-center gap-3 text-pink-400 text-xs font-bold">
+                    <span class="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">2</span>
+                    <span>Select "Open in Browser"</span>
+                </div>
+            </div>
+            <button onclick="document.getElementById('inAppModal').classList.add('hidden')" class="text-pink-300 text-xs font-bold hover:text-pink-500 underline">
+                Continue anyway
+            </button>
+        </div>
+    </div>
+
     <script src="products.js"></script>
     <script>
     // --- Config & Data ---
@@ -1027,6 +1053,16 @@
         }
     }
 
+    function detectInApp() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1);
+        
+        if (isInApp) {
+            document.getElementById('inAppModal').classList.remove('hidden');
+            document.getElementById('inAppModal').classList.add('flex');
+        }
+    }
+
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -1082,6 +1118,7 @@
     renderProducts();
     renderPortfolio();
     updateCartUI();
+    detectInApp();
 
     // --- Marquee Speed Control ---
     const marquee = document.getElementById('portfolio-marquee');
