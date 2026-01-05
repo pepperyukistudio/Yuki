@@ -372,12 +372,12 @@
         </div>
     </aside>
 
-    <nav id="navbar" class="fixed w-full top-0 z-[60] px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-700">
+    <nav id="navbar" class="fixed w-full top-0 z-[60] px-4 md:px-12 py-4 md:py-6 flex justify-between items-center transition-all duration-700">
         <div class="flex items-center space-x-4 group cursor-pointer" onclick="window.scrollTo(0,0)">
             <div class="relative w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-pink-100 transition-all group-hover:rotate-[360deg] duration-1000 overflow-hidden">
                 <img src="images/image_6a4f5f.png" alt="Logo" class="w-full h-full object-cover p-1">
             </div>
-            <div class="flex flex-col leading-none">
+            <div class="hidden sm:flex flex-col leading-none">
                 <span class="font-bold tracking-[0.3em] text-pink-500 text-sm sm:text-base">PEPPER YUKI</span>
                 <span class="text-[9px] text-pink-300 font-black uppercase tracking-[0.4em] mt-1">Art Studio</span>
             </div>
@@ -392,23 +392,23 @@
 
         <div class="flex items-center space-x-3 sm:space-x-4">
             <!-- Login Button -->
-            <button id="navLoginBtn" onclick="toggleAuthModal()" class="hidden md:flex items-center space-x-2 px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
+            <button id="navLoginBtn" onclick="toggleAuthModal()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
                 <i class="fa-solid fa-user text-xs text-pink-500"></i>
-                <span class="text-[10px] font-black text-pink-500 tracking-widest uppercase">Login</span>
+                <span class="hidden md:block text-[10px] font-black text-pink-500 tracking-widest uppercase">Login</span>
             </button>
 
             <!-- User Profile (Hidden by default) -->
             <div id="navUserProfile" class="hidden items-center space-x-2 bg-white/60 pl-2 pr-1 py-1.5 rounded-2xl border border-pink-100 relative">
                 <img id="userAvatar" src="" class="w-8 h-8 rounded-full border border-pink-200">
-                <span id="userName" class="text-[10px] font-black text-pink-500 tracking-widest uppercase px-2"></span>
+                <span id="userName" class="hidden md:block text-[10px] font-black text-pink-500 tracking-widest uppercase px-2"></span>
                 <button onclick="handleLogout()" class="w-8 h-8 rounded-xl bg-pink-50 hover:bg-pink-500 text-pink-400 hover:text-white transition-all flex items-center justify-center" title="Logout">
                     <i class="fa-solid fa-right-from-bracket text-xs"></i>
                 </button>
             </div>
 
-            <button onclick="toggleCurrency()" class="flex items-center space-x-2 px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
+            <button onclick="toggleCurrency()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
                 <span id="currencyIcon" class="text-xs font-black text-pink-500 bg-pink-100 w-6 h-6 flex items-center justify-center rounded-lg group-hover:bg-pink-500 group-hover:text-white transition-colors">฿</span>
-                <span id="currencyLabel" class="text-[10px] font-black text-pink-500 tracking-widest uppercase">THB</span>
+                <span id="currencyLabel" class="hidden sm:block text-[10px] font-black text-pink-500 tracking-widest uppercase">THB</span>
             </button>
 
             <div onclick="toggleCart()" class="relative cursor-pointer group p-3 bg-white/60 rounded-2xl hover:bg-white transition-all shadow-sm border border-pink-100">
@@ -733,7 +733,7 @@
     <script src="products.js"></script>
     <script>
     // --- Config & Data ---
-    let currentCurrency = 'THB';
+    let currentCurrency = localStorage.getItem('yukiCurrency') || 'THB';
     const exchangeRate = 35; // 1 USD = 35 THB
     let cart = JSON.parse(localStorage.getItem('yukiCart')) || [];
     let activeProductId = null;
@@ -776,7 +776,7 @@
                             </div>
                         </div>` : ''
                     }
-                    <img src="${p.images[0]}" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110">
+                    <img src="${p.images[0]}" loading="lazy" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110">
                 </div>
                 <div class="text-center px-2">
                     <h4 class="text-[10px] font-black text-pink-700/80 uppercase tracking-[0.2em] mb-2">${p.name}</h4>
@@ -795,7 +795,7 @@
         const container = document.getElementById('portfolio-marquee');
         const content = products.map(p => `
             <div class="w-[200px] md:w-[300px] aspect-[4/5] rounded-[30px] overflow-hidden relative group shrink-0 border-4 border-white shadow-lg cursor-pointer" onclick="openProductDetail(${p.id})">
-                <img src="${p.images[0]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <img src="${p.images[0]}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 <div class="absolute inset-0 bg-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <span class="bg-white/90 text-pink-500 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-sm">${p.name}</span>
                 </div>
@@ -808,6 +808,7 @@
 
     function toggleCurrency() {
         currentCurrency = currentCurrency === 'THB' ? 'USD' : 'THB';
+        localStorage.setItem('yukiCurrency', currentCurrency);
         document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
         document.getElementById('currencyLabel').innerText = currentCurrency;
         
@@ -1008,7 +1009,7 @@
         sakuraContainer.appendChild(petal);
         setTimeout(() => petal.remove(), 10000);
     }
-    setInterval(createSakura, 800);
+    setInterval(createSakura, 2000);
 
     // --- Utilities ---
     function toggleMobileMenu() {
@@ -1026,20 +1027,28 @@
         }
     }
 
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
     window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        const backToTopBtn = document.getElementById('backToTopBtn');
-
-        if (window.scrollY > 50) {
-            navbar.classList.add('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
-        } else {
-            navbar.classList.remove('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
-        }
-
-        if (window.scrollY > 500) {
-            backToTopBtn.classList.remove('translate-y-20', 'opacity-0');
-        } else {
-            backToTopBtn.classList.add('translate-y-20', 'opacity-0');
+        lastScrollY = window.scrollY;
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const navbar = document.getElementById('navbar');
+                const backToTopBtn = document.getElementById('backToTopBtn');
+                if (lastScrollY > 50) {
+                    navbar.classList.add('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
+                } else {
+                    navbar.classList.remove('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
+                }
+                if (lastScrollY > 500) {
+                    backToTopBtn.classList.remove('translate-y-20', 'opacity-0');
+                } else {
+                    backToTopBtn.classList.add('translate-y-20', 'opacity-0');
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 
@@ -1066,6 +1075,10 @@
     updateCountdown(); // Initial call
 
     // --- Init ---
+    // Update UI to match saved currency
+    document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
+    document.getElementById('currencyLabel').innerText = currentCurrency;
+
     renderProducts();
     renderPortfolio();
     updateCartUI();
