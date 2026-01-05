@@ -451,10 +451,10 @@
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
                         Continue with Google
                     </button>
-                    <button type="button" onclick="loginWithLine()" class="w-full btn-google py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-3 text-[#06C755] mt-3 hover:bg-[#06C755]/5 border-[#06C755]/20">
+                    <a href="https://lin.ee/WCHFC3j" target="_blank" class="w-full btn-google py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-3 text-[#06C755] mt-3 hover:bg-[#06C755]/5 border-[#06C755]/20">
                         <i class="fa-brands fa-line text-xl"></i>
-                        Continue with LINE
-                    </button>
+                        Chat with Artist
+                    </a>
                 </form>
                 <p class="text-center text-pink-300 text-xs mt-8">
                     Don't have an account? 
@@ -729,32 +729,6 @@
     </button>
 
     <div id="toast-container"></div>
-
-    <!-- In-App Browser Warning Modal -->
-    <div id="inAppModal" class="fixed inset-0 bg-pink-950/90 z-[200] hidden items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white rounded-[30px] max-w-sm w-full p-8 text-center shadow-2xl border-4 border-pink-200 relative">
-            <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-500 text-3xl animate-bounce">
-                <i class="fa-regular fa-compass"></i>
-            </div>
-            <h3 class="text-2xl font-bold text-pink-500 mb-4 tracking-tight">Open in Browser</h3>
-            <p class="text-pink-400 text-sm mb-6 leading-relaxed font-medium">
-                For the best magical experience, please open this page in external browser.
-            </p>
-            <div class="bg-pink-50 rounded-2xl p-4 mb-6 text-left space-y-3">
-                <div class="flex items-center gap-3 text-pink-400 text-xs font-bold">
-                    <span class="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">1</span>
-                    <span>Tap the menu icon <i class="fa-solid fa-ellipsis-vertical mx-1"></i> or <i class="fa-solid fa-share-from-square mx-1"></i></span>
-                </div>
-                <div class="flex items-center gap-3 text-pink-400 text-xs font-bold">
-                    <span class="bg-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm">2</span>
-                    <span>Select "Open in Browser"</span>
-                </div>
-            </div>
-            <button onclick="document.getElementById('inAppModal').classList.add('hidden')" class="text-pink-300 text-xs font-bold hover:text-pink-500 underline">
-                Continue anyway
-            </button>
-        </div>
-    </div>
 
     <script src="products.js"></script>
     <script>
@@ -1053,24 +1027,6 @@
         }
     }
 
-    function detectInApp() {
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isInApp = /FBAN|FBAV|Instagram|Line/i.test(ua);
-        
-        if (isInApp) {
-            // สำหรับ LINE: บังคับเปิด External Browser อัตโนมัติ
-            if (/Line/i.test(ua)) {
-                if (window.location.search.indexOf('openExternalBrowser=1') === -1) {
-                    const separator = window.location.search ? '&' : '?';
-                    window.location.href = window.location.href + separator + 'openExternalBrowser=1';
-                    return;
-                }
-            }
-            document.getElementById('inAppModal').classList.remove('hidden');
-            document.getElementById('inAppModal').classList.add('flex');
-        }
-    }
-
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -1126,7 +1082,6 @@
     renderProducts();
     renderPortfolio();
     updateCartUI();
-    detectInApp();
 
     // --- Marquee Speed Control ---
     const marquee = document.getElementById('portfolio-marquee');
@@ -1183,13 +1138,7 @@
             }
         }).catch((error) => {
             console.error(error);
-            if (error.code === 'auth/missing-initial-state' || error.message.includes("missing initial state")) {
-                // ถ้าเจอ Error นี้ แสดงว่า Session หาย ให้เปิด Modal แจ้งเตือนทันที
-                document.getElementById('inAppModal').classList.remove('hidden');
-                document.getElementById('inAppModal').classList.add('flex');
-            } else {
-                showToast("Login Failed", "Please try again.");
-            }
+            showToast("Login Failed", "Please try again.");
         });
 
         // Expose functions to global window object
@@ -1200,18 +1149,6 @@
                     showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
                 }).catch((error) => {
                     console.error("Google Login Error:", error);
-                    showToast("Login Failed", "Please try again.");
-                });
-        };
-
-        window.loginWithLine = () => {
-            const lineProvider = new OAuthProvider('oidc.line');
-            signInWithPopup(auth, lineProvider)
-                .then((result) => {
-                    toggleAuthModal();
-                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }).catch((error) => {
-                    console.error("LINE Login Error:", error);
                     showToast("Login Failed", "Please try again.");
                 });
         };
