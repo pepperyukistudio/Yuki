@@ -241,12 +241,12 @@
     </aside>
 
     <!-- Navigation Bar (Matched with index.html) -->
-    <nav id="navbar" class="fixed w-full top-0 z-[60] px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-700 bg-white/80 backdrop-blur-xl shadow-sm">
+    <nav id="navbar" class="fixed w-full top-0 z-[60] px-4 md:px-12 py-4 md:py-6 flex justify-between items-center transition-all duration-700 bg-white/80 backdrop-blur-xl shadow-sm">
         <div class="flex items-center space-x-4 group cursor-pointer" onclick="window.location.href='index.html'">
             <div class="relative w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-pink-100 transition-all group-hover:rotate-[360deg] duration-1000 overflow-hidden">
                 <img src="images/image_6a4f5f.png" alt="Logo" class="w-full h-full object-cover p-1">
             </div>
-            <div class="flex flex-col leading-none">
+            <div class="hidden sm:flex flex-col leading-none">
                 <span class="font-bold tracking-[0.3em] text-pink-500 text-sm md:text-base">PEPPER YUKI</span>
                 <span class="text-[9px] text-pink-300 font-black uppercase tracking-[0.4em] mt-1">Art Studio</span>
             </div>
@@ -261,23 +261,23 @@
 
         <div class="flex items-center space-x-3 sm:space-x-4">
             <!-- Login Button Linked to index structure -->
-            <button id="navLoginBtn" onclick="toggleAuthModal()" class="hidden md:flex items-center space-x-2 px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
+            <button id="navLoginBtn" onclick="toggleAuthModal()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
                 <i class="fa-solid fa-user text-xs text-pink-500"></i>
-                <span class="text-[10px] font-black text-pink-500 tracking-widest uppercase">Login</span>
+                <span class="hidden md:block text-[10px] font-black text-pink-500 tracking-widest uppercase">Login</span>
             </button>
 
             <!-- User Profile (Hidden by default) -->
             <div id="navUserProfile" class="hidden items-center space-x-2 bg-white/60 pl-2 pr-1 py-1.5 rounded-2xl border border-pink-100 relative">
                 <img id="userAvatar" src="" class="w-8 h-8 rounded-full border border-pink-200">
-                <span id="userName" class="text-[10px] font-black text-pink-500 tracking-widest uppercase px-2"></span>
+                <span id="userName" class="hidden md:block text-[10px] font-black text-pink-500 tracking-widest uppercase px-2"></span>
                 <button onclick="handleLogout()" class="w-8 h-8 rounded-xl bg-pink-50 hover:bg-pink-500 text-pink-400 hover:text-white transition-all flex items-center justify-center" title="Logout">
                     <i class="fa-solid fa-right-from-bracket text-xs"></i>
                 </button>
             </div>
 
-            <button onclick="toggleCurrency()" class="flex items-center space-x-2 px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
+            <button onclick="toggleCurrency()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
                 <span id="currencyIcon" class="text-xs font-black text-pink-500 bg-pink-100 w-6 h-6 flex items-center justify-center rounded-lg">฿</span>
-                <span id="currencyLabel" class="text-[10px] font-black text-pink-500 tracking-widest uppercase">THB</span>
+                <span id="currencyLabel" class="hidden sm:block text-[10px] font-black text-pink-500 tracking-widest uppercase">THB</span>
             </button>
 
             <div onclick="toggleCart()" class="relative cursor-pointer group p-3 bg-white/60 rounded-2xl hover:bg-white transition-all shadow-sm border border-pink-100">
@@ -415,7 +415,7 @@
     <script src="products.js"></script>
     <script>
     const exchangeRate = 35;
-    let currentCurrency = 'THB';
+    let currentCurrency = localStorage.getItem('yukiCurrency') || 'THB';
     let cart = JSON.parse(localStorage.getItem('yukiCart')) || [];
     let currentFilter = 'all';
     let activeProductId = null;
@@ -474,6 +474,7 @@
 
     function toggleCurrency() {
         currentCurrency = currentCurrency === 'THB' ? 'USD' : 'THB';
+        localStorage.setItem('yukiCurrency', currentCurrency);
         document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
         document.getElementById('currencyLabel').innerText = currentCurrency;
         renderGallery();
@@ -632,6 +633,9 @@
     }
 
     window.onload = () => {
+        // Update UI to match saved currency
+        document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
+        document.getElementById('currencyLabel').innerText = currentCurrency;
         renderGallery();
         updateCartUI();
     };
