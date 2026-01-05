@@ -1149,9 +1149,9 @@
         window.loginWithLine = () => {
             // ต้องตั้งค่า OpenID Connect ใน Firebase Console ก่อน (Provider ID: oidc.line)
             // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
-            const provider = new OAuthProvider('oidc.line');
+            const lineProvider = new OAuthProvider('oidc.line');
             // ใช้ Redirect แทน Popup เพื่อแก้ปัญหาบนมือถือ
-            signInWithRedirect(auth, provider);
+            signInWithRedirect(auth, lineProvider);
         };
 
         window.handleLogout = () => {
