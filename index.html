@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pepper Yuki Studio | Art & Shop</title>
-    <link rel="icon" href="images/image_6a4f5f.png" type="image/png">
+    <title>All Collections | Pepper Yuki Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Quicksand:wght@300;500;700&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
@@ -19,35 +18,7 @@
             --glass: rgba(255, 255, 255, 0.7);
         }
 
-        /* --- Sakura Animation --- */
-        .sakura {
-            position: fixed;
-            top: -10%;
-            background-color: #ffb7c5;
-            border-radius: 100% 0 100% 100%;
-            pointer-events: none;
-            z-index: 99;
-            opacity: 0.7;
-            box-shadow: 0 0 5px rgba(255, 183, 197, 0.5);
-            animation: fall linear infinite;
-            will-change: transform;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-10vh) translateX(0px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) translateX(100px) rotate(360deg); opacity: 0; }
-        }
-
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(to bottom, var(--soft-pink), var(--deep-pink)); 
-            border-radius: 10px;
-            border: 3px solid var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, var(--deep-pink), var(--accent-pink));
-        }
-
+        /* --- Style เมนูและพื้นหลังให้เหมือน index.html --- */
         body { 
             font-family: 'Quicksand', sans-serif; 
             background-color: var(--bg-color); 
@@ -60,43 +31,17 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Mali', cursive;
-        }
-
-        h1, h2, h3, h4, p, span, a, input {
-            color: var(--text-main);
-        }
-
         .font-handwriting { font-family: 'Sacramento', cursive; }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 3px; bottom: -6px; left: 0;
+            background: var(--accent-pink);
+            border-radius: 10px;
+            transition: width 0.3s ease;
         }
-
-        .hero-banner {
-            width: 100%; min-height: 100vh;
-            background: linear-gradient(rgba(255,250,251,0.7), rgba(255,250,251,0.4)), url('images/Banner.jpg');
-            background-size: cover; background-position: center;
-            display: flex; align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-title {
-            background: linear-gradient(to bottom, var(--deep-pink), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+        .nav-link:hover::after { width: 100%; }
 
         .btn-magical {
             background: linear-gradient(45deg, var(--soft-pink), var(--deep-pink));
@@ -109,15 +54,10 @@
             box-shadow: 0 15px 30px rgba(255, 143, 171, 0.5);
         }
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0; height: 3px; bottom: -6px; left: 0;
-            background: var(--accent-pink);
-            border-radius: 10px;
-            transition: width 0.3s ease;
+        /* --- Sidebar & Cart Transition --- */
+        #mobileSidebar, #sideCart {
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
         }
-        .nav-link:hover::after { width: 100%; }
 
         .product-card {
             background: rgba(255, 255, 255, 0.4);
@@ -133,25 +73,11 @@
             box-shadow: 0 30px 60px rgba(255, 143, 171, 0.15);
         }
 
-        /* เพิ่มสไตล์สำหรับ Overlay และ Banner ของ Sold Out */
         .sold-out-overlay {
             position: absolute;
             top: 10px;
             right: 10px;
             z-index: 10;
-        }
-
-        .sold-out-badge {
-            background: #ff5e78;
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
-        }
-
-        #productModal { transition: opacity 0.5s ease; }
-        
-        .thumb-active {
-            border: 3px solid var(--accent-pink) !important;
-            transform: scale(1.1);
         }
 
         .sold-out-banner {
@@ -161,11 +87,10 @@
             padding: 4px 10px;
             font-size: 0.6rem;
             font-weight: 700;
-            letter-spacing: 0.1em;
-            z-index: 40;
             border: 1px solid white;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .sold-out-banner:hover {
@@ -200,35 +125,44 @@
             transform: translateY(-5px);
         }
 
-        #modalSoldOutBanner {
+        /* --- Sparkle Hover Effect --- */
+        .sparkle {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 2rem;
-            padding: 10px 40px;
-            border: 4px solid white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: white;
+            opacity: 0;
+            z-index: 30;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+        }
+        .group:hover .sparkle {
+            animation: sparkle-pop 1.2s linear infinite;
+        }
+        @keyframes sparkle-pop {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1) rotate(90deg); opacity: 1; }
+            100% { transform: scale(0) rotate(180deg); opacity: 0; }
         }
 
-        /* --- Side Cart Styles --- */
-        #sideCart {
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .cart-item {
-            border-bottom: 1px solid rgba(255, 143, 171, 0.1);
-            padding: 15px 0;
+        .thumb-active {
+            border: 3px solid var(--accent-pink) !important;
+            transform: scale(1.1);
         }
 
-        /* --- Login Modal Extra Styles --- */
         .auth-input {
             background: rgba(255, 255, 255, 0.8);
             border: 2px solid #ffe4ea;
             transition: all 0.3s ease;
         }
-        .auth-input:focus {
-            border-color: var(--deep-pink);
-            box-shadow: 0 0 15px rgba(255, 143, 171, 0.2);
-            outline: none;
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(to bottom, var(--soft-pink), var(--deep-pink)); 
+            border-radius: 10px;
+            border: 3px solid var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--deep-pink), var(--accent-pink));
         }
 
         /* --- Toast Notification --- */
@@ -261,62 +195,15 @@
         }
         .toast.show { transform: translateX(0); }
 
-        /* --- Sparkle Animation --- */
-        @keyframes sparkle-spin {
-            0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
-            50% { transform: scale(1.2) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 8px white); }
+        /* --- Filter Buttons --- */
+        .filter-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sparkle-anim {
-            animation: sparkle-spin 3s ease-in-out infinite;
-        }
-
-        /* --- Marquee Portfolio --- */
-        .marquee-container {
-            overflow: hidden;
-            display: flex;
-            width: 100%;
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            padding: 20px 0;
-        }
-        .marquee-content {
-            display: flex;
-            gap: 2rem;
-            animation: marquee 60s linear infinite;
-            width: max-content;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* --- Scroll Animations --- */
-        .scroll-fade-up {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease-out, transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        .scroll-fade-up.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- Sparkle Hover Effect --- */
-        .sparkle {
-            position: absolute;
+        .filter-btn.active {
+            background-color: var(--deep-pink);
             color: white;
-            opacity: 0;
-            z-index: 30;
-            pointer-events: none;
-            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
-        }
-        .group:hover .sparkle {
-            animation: sparkle-pop 1.2s linear infinite;
-        }
-        @keyframes sparkle-pop {
-            0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            50% { transform: scale(1) rotate(90deg); opacity: 1; }
-            100% { transform: scale(0) rotate(180deg); opacity: 0; }
+            box-shadow: 0 10px 20px rgba(255, 143, 171, 0.3);
+            transform: translateY(-2px);
         }
 
         /* --- Google Button --- */
@@ -333,12 +220,11 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased pt-24">
 
-    <div id="sakura-container" class="pointer-events-none"></div>
-
+    <!-- Mobile Menu Sidebar (Matched with index.html) -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-pink-900/20 backdrop-blur-md z-[70] hidden opacity-0 transition-opacity duration-500" onclick="toggleMobileMenu()"></div>
-    <aside id="mobileSidebar" class="fixed top-0 right-0 h-full w-[75%] max-w-[300px] bg-white/95 backdrop-blur-2xl z-[80] translate-x-full shadow-2xl p-10 flex flex-col transition-transform duration-700">
+    <aside id="mobileSidebar" class="fixed top-0 right-0 h-full w-[75%] max-w-[300px] bg-white/95 backdrop-blur-2xl z-[80] translate-x-full shadow-2xl p-10 flex flex-col">
         <div class="flex justify-between items-center mb-12">
             <span class="font-handwriting text-4xl text-pink-500">Yuki.</span>
             <button onclick="toggleMobileMenu()" class="text-pink-400 hover:rotate-90 transition-transform">
@@ -346,52 +232,35 @@
             </button>
         </div>
         <nav class="flex flex-col space-y-8 font-bold text-pink-400 text-lg uppercase tracking-[0.2em]">
-            <a href="#home" onclick="toggleMobileMenu()" class="hover:translate-x-2 transition-transform">Home</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="hover:translate-x-2 transition-transform">About Yuki</a>
-            <a href="shop.html" onclick="toggleMobileMenu()" class="hover:translate-x-2 transition-transform">Gallery</a>
-            <a href="#contact" onclick="toggleMobileMenu()" class="hover:translate-x-2 transition-transform">Contact Yuki</a>
-            <button onclick="toggleAuthModal(); toggleMobileMenu()" class="text-left hover:translate-x-2 transition-transform">Login</button>
+            <a href="index.html#home" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#about" onclick="toggleMobileMenu()">About Yuki</a>
+            <a href="shop.html" onclick="toggleMobileMenu()" class="text-pink-600">Gallery</a>
+            <a href="index.html#contact" onclick="toggleMobileMenu()">Contact Yuki</a>
+            <button onclick="toggleAuthModal(); toggleMobileMenu()" class="text-left">Login</button>
         </nav>
     </aside>
 
-    <div id="cartOverlay" class="fixed inset-0 bg-pink-900/20 backdrop-blur-md z-[90] hidden opacity-0 transition-opacity duration-500" onclick="toggleCart()"></div>
-    <aside id="sideCart" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white/95 backdrop-blur-2xl z-[100] translate-x-full shadow-2xl p-8 flex flex-col">
-        <div class="flex justify-between items-center mb-8 border-b border-pink-100 pb-5">
-            <h3 class="text-2xl font-bold text-pink-500 tracking-tighter uppercase">My Collection</h3>
-            <button onclick="toggleCart()" class="text-pink-300 hover:text-pink-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
-        </div>
-        <div id="cartItems" class="flex-1 overflow-y-auto pr-2">
-            <p class="text-center text-pink-300 mt-10 font-medium italic">Your dreamland is empty...</p>
-        </div>
-        <div class="mt-auto pt-6 border-t border-pink-100">
-            <div class="flex justify-between items-center mb-6">
-                <span class="font-bold text-pink-300 uppercase tracking-widest text-xs">Total</span>
-                <span id="cartTotal" class="text-3xl font-bold text-pink-500">฿0.00</span>
-            </div>
-            <button class="w-full btn-magical py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px]">Checkout</button>
-        </div>
-    </aside>
-
-    <nav id="navbar" class="fixed w-full top-0 z-[60] px-4 md:px-12 py-4 md:py-6 flex justify-between items-center transition-all duration-700">
-        <div class="flex items-center space-x-4 group cursor-pointer" onclick="window.scrollTo(0,0)">
+    <!-- Navigation Bar (Matched with index.html) -->
+    <nav id="navbar" class="fixed w-full top-0 z-[60] px-4 md:px-12 py-4 md:py-6 flex justify-between items-center transition-all duration-700 bg-white/80 backdrop-blur-xl shadow-sm">
+        <div class="flex items-center space-x-4 group cursor-pointer" onclick="window.location.href='index.html'">
             <div class="relative w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-pink-100 transition-all group-hover:rotate-[360deg] duration-1000 overflow-hidden">
                 <img src="images/image_6a4f5f.png" alt="Logo" class="w-full h-full object-cover p-1">
             </div>
             <div class="hidden sm:flex flex-col leading-none">
-                <span class="font-bold tracking-[0.3em] text-pink-500 text-sm sm:text-base">PEPPER YUKI</span>
+                <span class="font-bold tracking-[0.3em] text-pink-500 text-sm md:text-base">PEPPER YUKI</span>
                 <span class="text-[9px] text-pink-300 font-black uppercase tracking-[0.4em] mt-1">Art Studio</span>
             </div>
         </div>
         
         <div class="hidden md:flex items-center space-x-12 font-bold text-pink-400/90 text-[11px] tracking-[0.3em]">
-            <a href="#home" class="nav-link uppercase relative">Home</a>
-            <a href="#about" class="nav-link uppercase relative">About Yuki</a>
-            <a href="shop.html" class="nav-link uppercase relative">Gallery</a>
-            <a href="#contact" class="nav-link uppercase relative">Contact Yuki</a>
+            <a href="index.html#home" class="nav-link uppercase relative">Home</a>
+            <a href="index.html#about" class="nav-link uppercase relative">About Yuki</a>
+            <a href="shop.html" class="nav-link uppercase relative text-pink-600">Gallery</a>
+            <a href="index.html#contact" class="nav-link uppercase relative">Contact Yuki</a>
         </div>
 
         <div class="flex items-center space-x-3 sm:space-x-4">
-            <!-- Login Button -->
+            <!-- Login Button Linked to index structure -->
             <button id="navLoginBtn" onclick="toggleAuthModal()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
                 <i class="fa-solid fa-user text-xs text-pink-500"></i>
                 <span class="hidden md:block text-[10px] font-black text-pink-500 tracking-widest uppercase">Login</span>
@@ -407,42 +276,37 @@
             </div>
 
             <button onclick="toggleCurrency()" class="flex items-center space-x-2 px-3 sm:px-4 py-2.5 bg-white/60 hover:bg-white rounded-2xl transition-all shadow-sm border border-pink-100 group">
-                <span id="currencyIcon" class="text-xs font-black text-pink-500 bg-pink-100 w-6 h-6 flex items-center justify-center rounded-lg group-hover:bg-pink-500 group-hover:text-white transition-colors">฿</span>
+                <span id="currencyIcon" class="text-xs font-black text-pink-500 bg-pink-100 w-6 h-6 flex items-center justify-center rounded-lg">฿</span>
                 <span id="currencyLabel" class="hidden sm:block text-[10px] font-black text-pink-500 tracking-widest uppercase">THB</span>
             </button>
 
             <div onclick="toggleCart()" class="relative cursor-pointer group p-3 bg-white/60 rounded-2xl hover:bg-white transition-all shadow-sm border border-pink-100">
-                <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" class="w-5 h-5 opacity-70 group-hover:scale-110 transition-transform">
-                <span id="cartBadge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold border-2 border-white animate-bounce">0</span>
+                <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" class="w-5 h-5 opacity-70">
+                <span id="cartBadge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-[9px] rounded-full w-5 h-5 flex items-center justify-center font-bold border-2 border-white">0</span>
             </div>
-            <button class="md:hidden flex flex-col space-y-2 focus:outline-none p-2" onclick="toggleMobileMenu()">
-                <div class="w-7 h-0.5 bg-pink-400"></div>
-                <div class="w-5 h-0.5 bg-pink-400 self-end"></div>
-                <div class="w-7 h-0.5 bg-pink-400"></div>
+            
+            <button class="md:hidden flex flex-col space-y-1.5 focus:outline-none p-2" onclick="toggleMobileMenu()">
+                <div class="w-6 h-0.5 bg-pink-400"></div>
+                <div class="w-4 h-0.5 bg-pink-400 self-end"></div>
+                <div class="w-6 h-0.5 bg-pink-400"></div>
             </button>
         </div>
     </nav>
 
+    <!-- Auth Modal (Matched index.html) -->
     <div id="authModal" class="fixed inset-0 bg-pink-950/20 backdrop-blur-2xl z-[120] hidden items-center justify-center p-4">
-        <div class="bg-white/90 rounded-[40px] max-w-md w-full p-10 relative shadow-[0_0_80px_rgba(255,143,171,0.3)] border border-white">
+        <div class="bg-white/90 rounded-[40px] max-w-md w-full p-10 relative shadow-2xl border border-white">
             <button onclick="toggleAuthModal()" class="absolute top-6 right-6 text-pink-300 hover:text-pink-500 transition-all text-2xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            
             <div id="loginForm">
                 <h3 class="text-3xl font-bold text-pink-500 mb-2 tracking-tighter">Welcome Back!</h3>
                 <p class="text-pink-300 text-sm mb-8 font-medium">Continue your magical journey</p>
                 <form onsubmit="event.preventDefault();" class="space-y-5">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-pink-400 ml-2">Email Address</label>
-                        <input type="email" placeholder="yuki@dreamland.com" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500 mt-1">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-pink-400 ml-2">Password</label>
-                        <input type="password" placeholder="••••••••" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500 mt-1">
-                    </div>
+                    <input type="email" placeholder="Email Address" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500">
+                    <input type="password" placeholder="Password" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500">
                     <button class="w-full btn-magical py-4 rounded-2xl font-black uppercase tracking-widest text-[11px] mt-4">Sign In</button>
-                    
+
                     <div class="relative my-4">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-pink-100"></div></div>
                         <div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-pink-300 font-bold tracking-widest">Or</span></div>
@@ -456,354 +320,156 @@
                         Continue with LINE
                     </button>
                 </form>
-                <p class="text-center text-pink-300 text-xs mt-8">
-                    Don't have an account? 
-                    <button onclick="switchAuth(false)" class="text-pink-500 font-bold hover:underline">Register</button>
-                </p>
             </div>
-
-            <div id="registerForm" class="hidden">
-                <h3 class="text-3xl font-bold text-pink-500 mb-2 tracking-tighter">Join the Magic</h3>
-                <p class="text-pink-300 text-sm mb-8 font-medium">Create your art sanctuary today</p>
-                <form onsubmit="event.preventDefault();" class="space-y-5">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-pink-400 ml-2">Your Name</label>
-                        <input type="text" placeholder="Yuki Pepper" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500 mt-1">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-pink-400 ml-2">Email Address</label>
-                        <input type="email" placeholder="yuki@dreamland.com" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500 mt-1">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-pink-400 ml-2">Password</label>
-                        <input type="password" placeholder="••••••••" class="auth-input w-full px-6 py-4 rounded-2xl text-pink-500 mt-1">
-                    </div>
-                    <button class="w-full btn-magical py-4 rounded-2xl font-black uppercase tracking-widest text-[11px] mt-4">Create Account</button>
-                </form>
-                <p class="text-center text-pink-300 text-xs mt-8">
-                    Already a member? 
-                    <button onclick="switchAuth(true)" class="text-pink-500 font-bold hover:underline">Sign In</button>
-                </p>
-            </div>
-
         </div>
     </div>
 
-    <header id="home" class="hero-banner">
-        <div class="container mx-auto px-6 md:px-12 relative z-10">
-            <div class="max-w-4xl">
-                <p class="text-pink-500 font-black tracking-[0.5em] mb-6 text-[11px] uppercase opacity-80">✨ Welcome to my dreamland</p>
-                <h1 class="hero-title text-5xl sm:text-9xl md:text-[10rem] font-bold leading-[0.8] mb-12 select-none">
-                    Yuki<br>Pepper<br>
-                    <span class="text-pink-300 font-handwriting lowercase text-6xl sm:text-8xl md:text-9xl ml-10 block mt-4 drop-shadow-lg" style="-webkit-text-fill-color: initial;">Studio</span>
-                </h1>
-                <div class="glass-panel flex items-center max-w-lg rounded-[25px] p-2 border border-white/80 shadow-2xl overflow-hidden group">
-                    <div class="flex items-center flex-1 px-5">
-                        <span class="text-xl group-hover:rotate-12 transition-transform">🎨</span>
-                        <input type="text" placeholder="Find your magic..." class="bg-transparent w-full focus:outline-none text-pink-500 placeholder-pink-300 text-sm ml-3 font-medium">
-                    </div>
-                    <button class="btn-magical px-8 py-4 rounded-[20px] font-black text-[11px] tracking-[0.2em] uppercase">Explore</button>
-                </div>
+    <!-- Shop Content -->
+    <main class="container mx-auto px-4 md:px-6 py-12">
+        <header class="text-center mb-16 md:mb-24 relative">
+            <h1 class="text-5xl md:text-8xl font-bold text-pink-600 tracking-tighter uppercase mb-6" id="shopTitle">All Collections</h1>
+            <div class="h-1.5 w-32 bg-gradient-to-r from-transparent via-pink-400 to-transparent mx-auto rounded-full mb-8"></div>
+            <p id="gallery-subtitle" class="text-pink-400 font-bold tracking-[0.5em] uppercase text-[10px] md:text-[12px]">Explore the world of enchanted artworks</p>
+            
+            <div class="flex justify-center gap-3 mt-10 flex-wrap">
+                <button onclick="setFilter('all')" class="filter-btn active px-6 py-2.5 rounded-full border border-pink-300 text-pink-400 font-bold text-[10px] uppercase tracking-widest hover:bg-pink-50 bg-white/50">All Dreams</button>
+                <button onclick="setFilter('available')" class="filter-btn px-6 py-2.5 rounded-full border border-pink-300 text-pink-400 font-bold text-[10px] uppercase tracking-widest hover:bg-pink-50 bg-white/50">Available</button>
+                <button onclick="setFilter('sold')" class="filter-btn px-6 py-2.5 rounded-full border border-pink-300 text-pink-400 font-bold text-[10px] uppercase tracking-widest hover:bg-pink-50 bg-white/50">Sold Out</button>
             </div>
+        </header>
+
+        <div id="shop-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-10 mb-32">
+            <!-- สินค้าจะถูก Render ตรงนี้ -->
         </div>
-    </header>
+    </main>
 
-    <!-- Exhibition Announcement Section -->
-    <section class="relative z-20 -mt-20 mb-20 px-4">
-        <div class="container mx-auto max-w-5xl relative">
-            <!-- Sparkle Effects -->
-            <div class="absolute -top-6 -left-6 z-30 text-yellow-200 drop-shadow-[0_0_15px_rgba(255,255,200,0.6)] animate-bounce duration-[3000ms]">
-                <i class="fa-solid fa-star text-4xl"></i>
-            </div>
-            <div class="absolute -bottom-8 -right-8 z-30 text-pink-300 drop-shadow-[0_0_15px_rgba(255,143,171,0.8)] animate-pulse duration-[2000ms]">
-                <i class="fa-solid fa-star text-5xl"></i>
-            </div>
-            <div class="absolute top-1/2 -left-12 z-30 text-white drop-shadow-lg sparkle-anim" style="animation-delay: 0.5s;">
-                <i class="fa-solid fa-star text-2xl"></i>
-            </div>
-            <div class="absolute -top-4 right-20 z-30 text-pink-200 drop-shadow-lg sparkle-anim" style="animation-delay: 1.5s;">
-                <i class="fa-solid fa-star text-xl"></i>
-            </div>
-
-            <div class="glass-panel bg-gradient-to-br from-white/95 via-pink-50/90 to-white/95 rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_60px_rgba(255,143,171,0.4)] border-2 border-white relative overflow-hidden group">
-                
-                <!-- Decorative Elements -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-pink-300 to-purple-300 rounded-full blur-[80px] opacity-40 -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-40 h-40 bg-pink-400 rounded-full blur-[60px] opacity-20 -ml-10 -mb-10 pointer-events-none"></div>
-
-                <!-- Content -->
-                <div class="flex-1 text-center md:text-left relative z-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-500 text-white rounded-full text-[10px] font-black tracking-[0.2em] uppercase mb-4 shadow-lg shadow-pink-500/30 animate-pulse">
-                        <i class="fa-solid fa-star text-[8px]"></i>
-                        Upcoming Exhibition
-                    </div>
-                    <h2 class="text-3xl md:text-5xl font-bold text-pink-600 mb-3 tracking-tighter leading-tight">
-                        Mango Art Festival <span class="text-pink-400">2026</span>
-                    </h2>
-                    <p class="text-pink-400/90 font-medium text-sm md:text-base max-w-xl leading-relaxed">
-                        Come meet Yuki Pepper at Asia's first and only lifestyle art festival. Experience the magic in person!
-                    </p>
-                    
-                    <div class="flex flex-wrap justify-center md:justify-start gap-4 md:gap-8 mt-6">
-                        <div class="flex items-center gap-3 bg-white/50 px-4 py-2 rounded-xl border border-pink-100">
-                            <div class="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center text-pink-500">
-                                <i class="fa-regular fa-calendar-check"></i>
-                            </div>
-                            <div class="text-left">
-                                <p class="text-[9px] text-pink-300 font-bold uppercase tracking-wider">Date</p>
-                                <p class="text-xs font-bold text-pink-500">4 - 8 March 2026</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3 bg-white/50 px-4 py-2 rounded-xl border border-pink-100">
-                            <div class="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center text-pink-500">
-                                <i class="fa-solid fa-map-location-dot"></i>
-                            </div>
-                            <div class="text-left">
-                                <p class="text-[9px] text-pink-300 font-bold uppercase tracking-wider">Location</p>
-                                <p class="text-xs font-bold text-pink-500">River City Bangkok</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3 bg-white/50 px-4 py-2 rounded-xl border border-pink-100">
-                            <div class="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center text-pink-500">
-                                <i class="fa-solid fa-store"></i>
-                            </div>
-                            <div class="text-left">
-                                <p class="text-[9px] text-pink-300 font-bold uppercase tracking-wider">Booth</p>
-                                <p class="text-xs font-bold text-pink-500">N64</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Countdown Timer -->
-                    <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
-                        <div class="bg-pink-500/10 border border-pink-200 rounded-xl p-2 md:p-3 min-w-[60px] md:min-w-[70px] text-center backdrop-blur-sm">
-                            <span id="cd-days" class="block text-xl md:text-2xl font-bold text-pink-600 leading-none">00</span>
-                            <span class="text-[8px] md:text-[9px] font-bold text-pink-400 uppercase tracking-wider">Days</span>
-                        </div>
-                        <div class="bg-pink-500/10 border border-pink-200 rounded-xl p-2 md:p-3 min-w-[60px] md:min-w-[70px] text-center backdrop-blur-sm">
-                            <span id="cd-hours" class="block text-xl md:text-2xl font-bold text-pink-600 leading-none">00</span>
-                            <span class="text-[8px] md:text-[9px] font-bold text-pink-400 uppercase tracking-wider">Hrs</span>
-                        </div>
-                        <div class="bg-pink-500/10 border border-pink-200 rounded-xl p-2 md:p-3 min-w-[60px] md:min-w-[70px] text-center backdrop-blur-sm">
-                            <span id="cd-minutes" class="block text-xl md:text-2xl font-bold text-pink-600 leading-none">00</span>
-                            <span class="text-[8px] md:text-[9px] font-bold text-pink-400 uppercase tracking-wider">Mins</span>
-                        </div>
-                        <div class="bg-pink-500/10 border border-pink-200 rounded-xl p-2 md:p-3 min-w-[60px] md:min-w-[70px] text-center backdrop-blur-sm">
-                            <span id="cd-seconds" class="block text-xl md:text-2xl font-bold text-pink-600 leading-none">00</span>
-                            <span class="text-[8px] md:text-[9px] font-bold text-pink-400 uppercase tracking-wider">Secs</span>
-                        </div>
-                    </div>
-
-                    <!-- Action Button -->
-                    <div class="mt-8 flex justify-center md:justify-start">
-                        <a href="https://www.google.com/maps/place/River+City+Bangkok/@13.7302124,100.5106905,17z/data=!3m1!4b1!4m6!3m5!1s0x30e299c3b5039999:0x78353f6242cf43e8!8m2!3d13.7302124!4d100.5132654!16s%2Fm%2F0411bj6?entry=tts&g_ep=EgoyMDI1MDEyMC4wIPu8ASoASAFQAw%3D%3D" target="_blank" class="group/btn relative overflow-hidden rounded-2xl bg-white p-1 inline-block transition-transform hover:scale-105 active:scale-95 shadow-xl">
-                            <div class="btn-magical px-8 py-5 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] flex items-center gap-3 relative z-10">
-                                <span class="text-white">Get Directions</span>
-                                <i class="fa-solid fa-location-arrow group-hover/btn:translate-x-1 transition-transform"></i>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Event Image -->
-                <div class="relative z-10 shrink-0 w-[70%] md:w-[320px] lg:w-[380px] mx-auto md:mx-0 rotate-3 hover:rotate-0 transition-transform duration-700">
-                    <div class="aspect-[4/5] rounded-[30px] overflow-hidden shadow-2xl border-4 border-white/50 relative group/img">
-                        <div class="absolute inset-0 bg-pink-500/10 group-hover/img:bg-transparent transition-colors z-10"></div>
-                        <img src="images/p1-main.png" alt="Mango Art Festival Art" class="w-full h-full object-cover transform group-hover/img:scale-110 transition-transform duration-1000">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="py-32">
-        <div class="container mx-auto px-6 max-w-6xl">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="space-y-8 order-2 lg:order-1">
-                    <div class="inline-block px-6 py-2 bg-pink-100/60 text-pink-500 rounded-full text-[10px] font-black tracking-[0.3em] uppercase">The Artist</div>
-                    <h3 class="text-5xl md:text-7xl font-bold text-pink-500 tracking-tighter leading-[1.1]">Painting Dreams in <span class="text-pink-300 italic">Soft Pastels.</span></h3>
-                    <p class="text-pink-400/80 leading-relaxed text-xl font-light italic">"I believe every color has a soul and every stroke tells a story of a dream you once had."</p>
-                    <div class="flex items-center space-x-6">
-                        <div class="h-[2px] w-16 bg-gradient-to-r from-pink-300 to-transparent"></div>
-                        <span class="font-handwriting text-3xl text-pink-400">Yuki Pepper</span>
-                    </div>
-                </div>
-                <div class="order-1 lg:order-2 max-w-md mx-auto relative group">
-                    <div class="absolute inset-0 bg-pink-200 rounded-[50px] rotate-6 group-hover:rotate-12 transition-transform duration-700 blur-2xl opacity-30"></div>
-                    <div class="relative bg-white aspect-[4/5] rounded-[50px] shadow-2xl overflow-hidden p-3 transform group-hover:scale-[1.02] transition-all duration-700">
-                        <img src="images/Profile.png" class="w-full h-full object-cover rounded-[40px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000" alt="Yuki Profile">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="shop" class="py-32 bg-pink-50/50 backdrop-blur-3xl relative">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-20 gap-8">
-                <div class="text-center md:text-left overflow-hidden">
-                    <h2 class="scroll-fade-up text-5xl md:text-8xl font-bold text-pink-500 tracking-tighter uppercase leading-[0.9]">Gallery</h2>
-                    <p class="scroll-fade-up text-pink-400 font-black tracking-[0.4em] uppercase text-[10px] mt-4 md:ml-1" style="transition-delay: 0.2s;">Latest Enchanted Creations</p>
-                </div>
-                <a href="shop.html" class="group flex items-center space-x-3 bg-white/60 hover:bg-white px-8 py-4 rounded-full border border-pink-100 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1">
-                    <span class="font-black text-pink-500 text-[11px] tracking-[0.2em] uppercase">View All Dreams</span>
-                    <i class="fa-solid fa-arrow-right text-pink-400 group-hover:translate-x-2 transition-transform"></i>
+    <!-- Footer Contact (Style กลับมาเหมือน index.html 100%) -->
+    <footer id="contact" class="bg-white py-32 border-t border-pink-100 relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h3 class="text-7xl md:text-9xl font-handwriting text-pink-400 mb-16">Stay Magical</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mb-20">
+                <a href="https://www.instagram.com/yukipepper.studio" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
+                    <i class="fa-brands fa-instagram text-4xl text-pink-400 mb-4"></i>
+                    <p class="font-bold text-pink-600 text-base">Instagram</p>
+                </a>
+                <a href="https://www.facebook.com/Yuki.pepper.FB" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
+                    <i class="fa-brands fa-facebook-f text-4xl text-pink-400 mb-4"></i>
+                    <p class="font-bold text-pink-600 text-base">Facebook</p>
+                </a>
+                <a href="https://www.tiktok.com/@yukipepper.studio" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
+                    <i class="fa-brands fa-tiktok text-4xl text-pink-400 mb-4"></i>
+                    <p class="font-bold text-pink-600 text-base">TikTok</p>
+                </a>
+                <a href="https://lin.ee/5FnDESe" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
+                    <i class="fa-brands fa-line text-4xl text-pink-400 mb-4"></i>
+                    <p class="font-bold text-pink-600 text-base">Line OA</p>
                 </a>
             </div>
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
-                </div>
+            <p class="text-pink-500 mb-8 font-bold">
+                Contact: <a href="mailto:pepperyukistudio@gmail.com" class="hover:text-pink-700 underline decoration-pink-300 underline-offset-4 transition-colors">pepperyukistudio@gmail.com</a>
+            </p>
+            <p class="text-[10px] text-pink-300 font-black uppercase tracking-[0.8em]">© 2026 PEPPER YUKI STUDIO</p>
         </div>
-    </section>
+    </footer>
 
-    <!-- Portfolio Marquee Section (ส่วนรวมผลงานทั้งหมด) -->
-    <section id="portfolio" class="py-24 bg-white relative overflow-hidden border-t border-pink-50">
-        <div class="container mx-auto px-6 mb-12 text-center relative z-10">
-            <h2 class="text-4xl md:text-6xl font-bold text-pink-500 tracking-tighter uppercase">Art Archive</h2>
-            <p class="text-pink-400 font-bold tracking-[0.3em] uppercase text-[10px] mt-3">A journey through all my dreams</p>
-        </div>
-        <div class="marquee-container">
-            <div class="marquee-content" id="portfolio-marquee">
-                <!-- JS จะทำการใส่รูปภาพตรงนี้ -->
-            </div>
-        </div>
-    </section>
-
-    <footer id="contact" class="bg-white py-32 border-t border-pink-100 relative overflow-hidden">
-    <div class="container mx-auto px-6 text-center relative z-10">
-        <h3 class="text-7xl md:text-9xl font-handwriting text-pink-400 mb-16">Stay Magical</h3>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mb-20">
-            <a href="https://www.instagram.com/yukipepper.studio" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
-                <i class="fa-brands fa-instagram text-4xl text-pink-400 mb-4"></i>
-                <p class="font-bold text-pink-600 text-base">Instagram</p>
-            </a>
-            <a href="https://www.facebook.com/Yuki.pepper.FB" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
-                <i class="fa-brands fa-facebook-f text-4xl text-pink-400 mb-4"></i>
-                <p class="font-bold text-pink-600 text-base">Facebook</p>
-            </a>
-            <a href="https://www.tiktok.com/@yukipepper.studio" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
-                <i class="fa-brands fa-tiktok text-4xl text-pink-400 mb-4"></i>
-                <p class="font-bold text-pink-600 text-base">TikTok</p>
-            </a>
-            <a href="https://lin.ee/5FnDESe" target="_blank" class="bg-pink-50/50 p-8 rounded-[40px] block group transition-all hover:bg-white hover:shadow-2xl hover:-translate-y-3 border border-pink-100">
-                <i class="fa-brands fa-line text-4xl text-pink-400 mb-4"></i>
-                <p class="font-bold text-pink-600 text-base">Line OA</p>
-            </a>
-        </div>
-        <p class="text-pink-500 mb-8 font-bold">
-    Contact: <a href="mailto:pepperyukistudio@gmail.com" class="hover:text-pink-700 underline decoration-pink-300 underline-offset-4 transition-colors">pepperyukistudio@gmail.com</a>
-</p>
-        <p class="text-[10px] text-pink-300 font-black uppercase tracking-[0.8em]">© 2026 PEPPER YUKI STUDIO</p>
-    </div>
-</footer>
-
+    <!-- Product Modal -->
     <div id="productModal" class="fixed inset-0 bg-pink-950/20 backdrop-blur-2xl z-[110] hidden items-center justify-center p-4">
-        <div class="bg-white/90 rounded-[30px] md:rounded-[50px] max-w-5xl w-full max-h-[90vh] md:max-h-[95vh] overflow-y-auto flex flex-col md:flex-row relative shadow-[0_0_80px_rgba(255,143,171,0.3)] border border-white">
-            <div id="modalSoldOutBanner" class="sold-out-banner hidden">SOLD OUT</div>
+        <div class="bg-white/90 rounded-[30px] md:rounded-[50px] max-w-5xl w-full max-h-[90vh] md:max-h-[92vh] overflow-y-auto flex flex-col md:flex-row relative shadow-2xl border border-white">
             <button onclick="closeModal()" class="absolute top-8 right-8 text-pink-300 hover:text-pink-500 hover:rotate-90 transition-all text-3xl z-50">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="w-full md:w-3/5 p-8 flex flex-col gap-6">
-                <div class="relative flex-1 bg-pink-50 rounded-[30px] md:rounded-[40px] overflow-hidden min-h-[250px] md:min-h-[350px] shadow-inner">
+            <div class="w-full md:w-3/5 p-6 md:p-8 flex flex-col gap-6 bg-pink-50/30">
+                <div class="relative flex-1 bg-white rounded-[30px] md:rounded-[40px] overflow-hidden shadow-inner min-h-[250px]">
                     <img id="modalImg" src="" class="w-full h-full object-cover">
                 </div>
                 <div id="thumbnailContainer" class="flex gap-4 justify-center"></div>
             </div>
-            <div class="w-full md:w-2/5 p-6 md:p-14 flex flex-col justify-center">
-                <span class="text-pink-300 font-black tracking-[0.4em] uppercase text-[10px]">Original Art Piece</span>
-                <h3 id="modalTitle" class="text-4xl md:text-5xl font-bold text-pink-500 mt-3 tracking-tighter">Product</h3>
-                <p id="modalDesc" class="text-pink-400/80 text-sm mt-6 leading-relaxed font-medium">Description goes here.</p>
-                <p id="modalPrice" class="text-xl md:text-2xl text-pink-500/80 font-bold mb-4 md:mb-6 tracking-wide">฿0.00</p>
-                <div class="my-10 h-[2px] bg-gradient-to-r from-pink-100 to-transparent"></div>
-                <div id="modalActionArea">
-                    <button id="addBtn" onclick="addToCart()" class="w-full bg-pink-600 text-white font-black py-4 rounded-[20px] hover:bg-pink-400 transition-all uppercase text-[10px] tracking-[0.3em]">
-    Collect This Dream
-</button>
-                </div>
+            <div class="w-full md:w-2/5 p-6 md:p-10 flex flex-col justify-center">
+                <h3 id="modalTitle" class="text-4xl font-bold text-pink-500 mb-4">Product</h3>
+                <p id="modalPrice" class="text-2xl text-pink-400 font-bold mb-6">฿0.00</p>
+                <p id="modalDesc" class="text-pink-600/70 text-sm mb-10 leading-relaxed">Description</p>
+                <button id="addBtn" onclick="addToCart()" class="w-full btn-magical py-5 rounded-[20px] font-black uppercase tracking-widest text-xs">Collect This Dream</button>
             </div>
         </div>
     </div>
 
-    <!-- Back to Top Button -->
-    <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 z-40 bg-pink-500 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center translate-y-20 opacity-0 transition-all duration-500 hover:bg-pink-400 hover:shadow-pink-500/50 hover:scale-110">
-        <i class="fa-solid fa-arrow-up"></i>
-    </button>
+    <!-- Side Cart -->
+    <div id="cartOverlay" class="fixed inset-0 bg-pink-900/20 backdrop-blur-md z-[90] hidden opacity-0 transition-opacity duration-500" onclick="toggleCart()"></div>
+    <aside id="sideCart" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white/95 backdrop-blur-2xl z-[100] translate-x-full shadow-2xl p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-2xl font-bold text-pink-500 tracking-tighter uppercase">My Collection</h3>
+            <button onclick="toggleCart()" class="text-pink-300 hover:text-pink-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+        </div>
+        <div id="cartItems" class="flex-1 overflow-y-auto pr-2"></div>
+        <div class="mt-auto pt-6 border-t border-pink-100">
+            <div class="flex justify-between items-center mb-6">
+                <span class="font-bold text-pink-300 uppercase tracking-widest text-xs">Total</span>
+                <span id="cartTotal" class="text-3xl font-bold text-pink-500">฿0.00</span>
+            </div>
+            <button class="w-full btn-magical py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px]">Checkout</button>
+        </div>
+    </aside>
 
     <div id="toast-container"></div>
 
     <script src="products.js"></script>
     <script>
-    // --- Config & Data ---
+    const exchangeRate = 35;
     let currentCurrency = localStorage.getItem('yukiCurrency') || 'THB';
-    const exchangeRate = 35; // 1 USD = 35 THB
     let cart = JSON.parse(localStorage.getItem('yukiCart')) || [];
+    let currentFilter = 'all';
     let activeProductId = null;
     let isUserLoggedIn = false;
 
-    // --- Scroll Animations Observer ---
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-
-    // --- Core Functions ---
-
-    function formatPrice(thbAmount) {
-        if (currentCurrency === 'THB') {
-            return `฿${thbAmount.toLocaleString()}`;
-        } else {
-            const usdAmount = thbAmount / exchangeRate;
-            return `$${usdAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    function renderGallery() {
+        const grid = document.getElementById('shop-grid');
+        
+        let filteredProducts = products;
+        if (currentFilter === 'available') {
+            filteredProducts = products.filter(p => !p.soldOut);
+        } else if (currentFilter === 'sold') {
+            filteredProducts = products.filter(p => p.soldOut);
         }
-    }
 
-    function renderProducts() {
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = products.slice(0, 8).map((p, index) => `
-            <div class="product-card p-4 group cursor-pointer scroll-fade-up" style="transition-delay: ${index * 0.1}s" onclick="openProductDetail(${p.id})">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-[30px] mb-6 shadow-sm">
+        document.getElementById('gallery-subtitle').innerText = `Showing ${filteredProducts.length} enchanted artworks`;
+        
+        grid.innerHTML = filteredProducts.map(p => `
+            <div class="product-card p-4 md:p-6 group cursor-pointer" onclick="openDetail(${p.id})">
+                <div class="relative aspect-[4/5] overflow-hidden rounded-[25px] mb-6 shadow-sm">
                     <div class="sparkle top-4 left-4 text-[10px]" style="animation-delay: 0s"><i class="fa-solid fa-star"></i></div>
                     <div class="sparkle bottom-8 right-6 text-[14px]" style="animation-delay: 0.4s"><i class="fa-solid fa-star"></i></div>
                     <div class="sparkle top-1/2 right-4 text-[8px]" style="animation-delay: 0.2s"><i class="fa-solid fa-star"></i></div>
-                    ${p.soldOut ? 
-                        `<div class="sold-out-overlay">
-                            <div class="sold-out-banner">
-                                SOLD OUT
-                                <div class="sold-out-tooltip">สินค้าหมดแล้ว รอติดตามคอลเลกชันหน้านะคะ</div>
-                            </div>
-                        </div>` : ''
-                    }
-                    <img src="${p.images[0]}" loading="lazy" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110">
+                    ${p.soldOut ? `<div class="sold-out-overlay">
+                        <div class="sold-out-banner">
+                            SOLD OUT
+                            <div class="sold-out-tooltip">สินค้าหมดแล้ว รอติดตามคอลเลกชันหน้านะคะ</div>
+                        </div>
+                    </div>` : ''}
+                    <img src="${p.images[0]}" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110">
                 </div>
                 <div class="text-center px-2">
-                    <h4 class="text-[10px] font-black text-pink-700/80 uppercase tracking-[0.2em] mb-2">${p.name}</h4>
-                    ${p.soldOut ? '' : `<p class="text-pink-300 font-bold text-[10px] uppercase tracking-widest">${formatPrice(p.priceTHB)}</p>`}
+                    <h4 class="text-[10px] md:text-[11px] font-black text-pink-700/80 uppercase tracking-widest mb-2 truncate">${p.name}</h4>
+                    ${p.soldOut ? '' : `<p class="text-pink-300 font-bold text-xs uppercase tracking-widest">${formatPrice(p.priceTHB)}</p>`}
                 </div>
             </div>
         `).join('');
-
-        // Re-observe new elements for animation
-        grid.querySelectorAll('.scroll-fade-up').forEach(el => {
-            observer.observe(el);
-        });
     }
 
-    function renderPortfolio() {
-        const container = document.getElementById('portfolio-marquee');
-        const content = products.map(p => `
-            <div class="w-[200px] md:w-[300px] aspect-[4/5] rounded-[30px] overflow-hidden relative group shrink-0 border-4 border-white shadow-lg cursor-pointer" onclick="openProductDetail(${p.id})">
-                <img src="${p.images[0]}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span class="bg-white/90 text-pink-500 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-sm">${p.name}</span>
-                </div>
-            </div>
-        `).join('');
+    function setFilter(filterType) {
+        currentFilter = filterType;
         
-        // Duplicate content for seamless loop (ทำซ้ำเพื่อให้เลื่อนได้ไม่สะดุด)
-        container.innerHTML = content + content;
+        // Update buttons UI
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.getAttribute('onclick').includes(`'${filterType}'`)) btn.classList.add('active');
+        });
+
+        renderGallery();
+    }
+
+    // --- Core UI Functions ---
+    function formatPrice(thb) {
+        return currentCurrency === 'THB' ? `฿${thb.toLocaleString()}` : `$${(thb/exchangeRate).toFixed(2)}`;
     }
 
     function toggleCurrency() {
@@ -811,58 +477,89 @@
         localStorage.setItem('yukiCurrency', currentCurrency);
         document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
         document.getElementById('currencyLabel').innerText = currentCurrency;
-        
-        renderProducts();
+        renderGallery();
         updateCartUI();
-        if (!document.getElementById('productModal').classList.contains('hidden')) {
-            const p = products.find(i => i.id === activeProductId);
-            document.getElementById('modalPrice').innerText = formatPrice(p.priceTHB);
+    }
+
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('mobileSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const isOpen = !sidebar.classList.contains('translate-x-full');
+        if (isOpen) {
+            sidebar.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            overlay.classList.remove('opacity-100');
+        } else {
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            sidebar.classList.remove('translate-x-full');
         }
     }
 
-    // --- Auth System (Added) ---
     function toggleAuthModal() {
         const modal = document.getElementById('authModal');
-        const isHidden = modal.classList.contains('hidden');
-        if(isHidden) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        } else {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = 'auto';
+        modal.classList.toggle('hidden');
+        modal.classList.toggle('flex');
+        
+        if (modal.classList.contains('hidden')) {
         }
     }
-
-    function switchAuth(isLogin) {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        if(isLogin) {
-            loginForm.classList.remove('hidden');
-            registerForm.classList.add('hidden');
-        } else {
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-        }
-    }
-
-    // --- Cart System ---
 
     function toggleCart() {
         const cartSide = document.getElementById('sideCart');
         const overlay = document.getElementById('cartOverlay');
-        const isHidden = cartSide.classList.contains('translate-x-full');
-        
-        if (isHidden) {
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
-            cartSide.classList.remove('translate-x-full');
-        } else {
-            cartSide.classList.add('translate-x-full');
+        cartSide.classList.toggle('translate-x-full');
+        if (cartSide.classList.contains('translate-x-full')) {
             overlay.classList.remove('opacity-100');
             setTimeout(() => overlay.classList.add('hidden'), 500);
+        } else {
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
         }
+    }
+
+    function openDetail(id) {
+        activeProductId = id;
+        const p = products.find(i => i.id === id);
+        const modal = document.getElementById('productModal');
+        const mainImg = document.getElementById('modalImg');
+        const thumbContainer = document.getElementById('thumbnailContainer');
+        const addBtn = document.getElementById('addBtn');
+
+        document.getElementById('modalTitle').innerText = p.name;
+        document.getElementById('modalPrice').innerText = p.soldOut ? '' : formatPrice(p.priceTHB);
+        document.getElementById('modalDesc').innerText = p.desc;
+        mainImg.src = p.images[0];
+
+        // จัดการ Thumbnails รูปเพิ่มเติม
+        thumbContainer.innerHTML = p.images.map((img, idx) => `
+            <img src="${img}" onclick="changeImg(this, '${img}')" class="w-16 h-16 object-cover rounded-xl cursor-pointer border-3 border-transparent transition-all ${idx === 0 ? 'thumb-active' : ''}">
+        `).join('');
+
+        if(p.soldOut) {
+            addBtn.innerText = "OUT OF STOCK";
+            addBtn.disabled = true;
+            addBtn.classList.add('opacity-30', 'grayscale');
+        } else {
+            addBtn.innerText = "Collect This Dream";
+            addBtn.disabled = false;
+            addBtn.classList.remove('opacity-30', 'grayscale');
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function changeImg(el, src) {
+        document.getElementById('modalImg').src = src;
+        document.querySelectorAll('#thumbnailContainer img').forEach(t => t.classList.remove('thumb-active'));
+        el.classList.add('thumb-active');
+    }
+
+    function closeModal() {
+        document.getElementById('productModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
     function showToast(title, message) {
@@ -888,20 +585,20 @@
         }, 3000);
     }
 
-    function addToCart(id) {
+    function addToCart() {
         if (!isUserLoggedIn) {
             showToast("Login Required", "Please login to collect this dream.");
             toggleAuthModal();
             return;
         }
 
-        const product = products.find(p => p.id === id);
-        if (product && !product.soldOut) {
-            cart.push(product);
+        const p = products.find(i => i.id === activeProductId);
+        if(p && !p.soldOut) {
+            cart.push(p);
             localStorage.setItem('yukiCart', JSON.stringify(cart));
             updateCartUI();
             closeModal();
-            showToast("Added to Collection", `"${product.name}" is now in your dreamland.`);
+            showToast("Added to Collection", `"${p.name}" is now in your dreamland.`);
             toggleCart();
         }
     }
@@ -913,201 +610,41 @@
     }
 
     function updateCartUI() {
-        const cartList = document.getElementById('cartItems');
-        const badge = document.getElementById('cartBadge');
-        const totalEl = document.getElementById('cartTotal');
-        
-        badge.innerText = cart.length;
-        
+        document.getElementById('cartBadge').innerText = cart.length;
+        const container = document.getElementById('cartItems');
         if (cart.length === 0) {
-            cartList.innerHTML = `<p class="text-center text-pink-300 mt-10 font-medium italic">Your dreamland is empty...</p>`;
-            totalEl.innerText = formatPrice(0);
+            container.innerHTML = `<p class="text-center text-pink-300 mt-10 font-medium italic">Empty...</p>`;
+            document.getElementById('cartTotal').innerText = formatPrice(0);
             return;
         }
-
         let total = 0;
-        cartList.innerHTML = cart.map((item, index) => {
+        container.innerHTML = cart.map((item, idx) => {
             total += item.priceTHB;
             return `
-                <div class="cart-item flex items-center gap-4">
-                    <img src="${item.images[0]}" class="w-16 h-16 rounded-xl object-cover">
-                    <div class="flex-1">
-                        <h5 class="text-sm font-bold text-pink-500 leading-tight">${item.name}</h5>
-                        <p class="text-xs text-pink-400 font-bold mt-1">${formatPrice(item.priceTHB)}</p>
-                    </div>
-                    <button onclick="removeFromCart(${index})" class="text-pink-200 hover:text-pink-500 transition-colors">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
+            <div class="flex items-center gap-4 mb-4 border-b border-pink-50 pb-4">
+                <img src="${item.images[0]}" class="w-14 h-14 rounded-xl object-cover">
+                <div class="flex-1 font-bold text-pink-500 text-xs">${item.name}</div>
+                <div class="text-pink-400 font-bold text-xs">${formatPrice(item.priceTHB)}</div>
+                <button onclick="removeFromCart(${idx})" class="text-pink-200 hover:text-pink-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
             `;
         }).join('');
-
-        totalEl.innerText = formatPrice(total);
+        document.getElementById('cartTotal').innerText = formatPrice(total);
     }
 
-    // --- Modal Logic ---
-
-    function openProductDetail(id) {
-        activeProductId = id;
-        const p = products.find(item => item.id === id);
-        const modal = document.getElementById('productModal');
-        const mainImg = document.getElementById('modalImg');
-        const thumbContainer = document.getElementById('thumbnailContainer');
-        const soldOutBanner = document.getElementById('modalSoldOutBanner');
-        const addBtn = document.getElementById('addBtn');
-
-        document.getElementById('modalTitle').innerText = p.name;
-        document.getElementById('modalPrice').innerText = p.soldOut ? '' : formatPrice(p.priceTHB);
-        document.getElementById('modalDesc').innerText = p.desc;
-        mainImg.src = p.images[0];
-
-        thumbContainer.innerHTML = p.images.map((img, idx) => `
-            <img src="${img}" onclick="changeModalImg(this, '${img}')" class="w-20 h-20 object-cover rounded-2xl cursor-pointer border-3 border-transparent transition-all ${idx === 0 ? 'thumb-active' : ''}">
-        `).join('');
-
-        addBtn.onclick = () => addToCart(p.id);
-
-        if(p.soldOut) {
-            soldOutBanner.classList.remove('hidden');
-            addBtn.innerText = "OUT OF STOCK";
-            addBtn.disabled = true;
-            addBtn.classList.add('opacity-30', 'grayscale');
-        } else {
-            soldOutBanner.classList.add('hidden');
-            addBtn.innerText = "Collect This Dream";
-            addBtn.disabled = false;
-            addBtn.classList.remove('opacity-30', 'grayscale');
-        }
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('productModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-
-    function changeModalImg(el, imgSrc) {
-        const mainImg = document.getElementById('modalImg');
-        mainImg.src = imgSrc;
-        document.querySelectorAll('#thumbnailContainer img').forEach(t => t.classList.remove('thumb-active'));
-        el.classList.add('thumb-active');
-    }
-
-    // --- Sakura Engine ---
-    const sakuraContainer = document.getElementById('sakura-container');
-    function createSakura() {
-        if(document.visibilityState !== 'visible') return;
-        const petal = document.createElement('div');
-        petal.classList.add('sakura');
-        const size = Math.random() * 8 + 10 + 'px';
-        petal.style.width = size; petal.style.height = size;
-        petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.animationDuration = Math.random() * 4 + 6 + 's';
-        sakuraContainer.appendChild(petal);
-        setTimeout(() => petal.remove(), 10000);
-    }
-    setInterval(createSakura, 2000);
-
-    // --- Utilities ---
-    function toggleMobileMenu() {
-        const sidebar = document.getElementById('mobileSidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const isOpen = !sidebar.classList.contains('translate-x-full');
-        if (isOpen) {
-            sidebar.classList.add('translate-x-full');
-            overlay.classList.remove('opacity-100');
-            setTimeout(() => overlay.classList.add('hidden'), 500);
-        } else {
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
-            sidebar.classList.remove('translate-x-full');
-        }
-    }
-
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    window.addEventListener('scroll', () => {
-        lastScrollY = window.scrollY;
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const navbar = document.getElementById('navbar');
-                const backToTopBtn = document.getElementById('backToTopBtn');
-                if (lastScrollY > 50) {
-                    navbar.classList.add('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
-                } else {
-                    navbar.classList.remove('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-lg');
-                }
-                if (lastScrollY > 500) {
-                    backToTopBtn.classList.remove('translate-y-20', 'opacity-0');
-                } else {
-                    backToTopBtn.classList.add('translate-y-20', 'opacity-0');
-                }
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    // --- Exhibition Countdown ---
-    function updateCountdown() {
-        const targetDate = new Date('March 4, 2026 00:00:00').getTime();
-        const now = new Date().getTime();
-        const gap = targetDate - now;
-
-        if (gap > 0) {
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
-
-            document.getElementById('cd-days').innerText = Math.floor(gap / day);
-            document.getElementById('cd-hours').innerText = Math.floor((gap % day) / hour);
-            document.getElementById('cd-minutes').innerText = Math.floor((gap % hour) / minute);
-            document.getElementById('cd-seconds').innerText = Math.floor((gap % minute) / second);
-        }
-    }
-    
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // Initial call
-
-    // --- Init ---
-    // Update UI to match saved currency
-    document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
-    document.getElementById('currencyLabel').innerText = currentCurrency;
-
-    renderProducts();
-    renderPortfolio();
-    updateCartUI();
-
-    // --- Marquee Speed Control ---
-    const marquee = document.getElementById('portfolio-marquee');
-    marquee.addEventListener('mouseenter', () => {
-        marquee.getAnimations().forEach(anim => {
-            if (anim.updatePlaybackRate) anim.updatePlaybackRate(0.2);
-            else anim.playbackRate = 0.2;
-        });
-    });
-    marquee.addEventListener('mouseleave', () => {
-        marquee.getAnimations().forEach(anim => {
-            if (anim.updatePlaybackRate) anim.updatePlaybackRate(1);
-            else anim.playbackRate = 1;
-        });
-    });
-
-    // --- Scroll Animations ---
-    document.querySelectorAll('.scroll-fade-up').forEach(el => {
-        observer.observe(el);
-    });
+    window.onload = () => {
+        // Update UI to match saved currency
+        document.getElementById('currencyIcon').innerText = currentCurrency === 'THB' ? '฿' : '$';
+        document.getElementById('currencyLabel').innerText = currentCurrency;
+        renderGallery();
+        updateCartUI();
+    };
     </script>
 
     <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn1kmZMqB3oA7S3in8Oe-HH0dJCW95ABY",
@@ -1122,6 +659,22 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+
+        // 1. บังคับใช้ Local Storage เพื่อลดปัญหา Session หาย
+        setPersistence(auth, browserLocalPersistence).catch(console.error);
+
+        // 2. รับค่าเมื่อ Redirect กลับมา (สำหรับ LINE Login)
+        getRedirectResult(auth).then((result) => {
+            if (result) {
+                showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+            }
+        }).catch((error) => {
+            console.error("Redirect Error:", error);
+            // ดักจับ Error เฉพาะตัวนี้ เพื่อไม่ให้ User ตกใจ
+            if (error.message.includes("missing initial state")) {
+                showToast("Browser Issue", "Please open in Chrome/Safari.");
+            }
+        });
 
         // Expose functions to global window object
         window.loginWithGoogle = () => {
@@ -1144,19 +697,8 @@
             // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
             const lineProvider = new OAuthProvider('oidc.line');
             
-            // เปลี่ยนกลับมาใช้ Popup เพื่อแก้ปัญหา "missing initial state" บน Chrome/Localhost
-            signInWithPopup(auth, lineProvider)
-                .then((result) => {
-                    toggleAuthModal();
-                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }).catch((error) => {
-                    console.error(error);
-                    if (error.message.includes("missing initial state") || error.code === "auth/popup-blocked") {
-                        showToast("Browser Issue", "Please open in Chrome/Safari app.");
-                    } else {
-                        showToast("Login Failed", "Please try again.");
-                    }
-                });
+            // 3. ใช้ Redirect สำหรับ LINE (ดีกว่าบนมือถือ)
+            signInWithRedirect(auth, lineProvider);
         };
 
         window.handleLogout = () => {
