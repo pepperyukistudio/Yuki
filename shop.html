@@ -660,16 +660,6 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // Handle Redirect Result (สำหรับรับค่าตอนเด้งกลับมาจากหน้า Login ในมือถือ)
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-            }
-        }).catch((error) => {
-            console.error(error);
-            // alert("Login Error: " + error.message); // ปิดการแจ้งเตือน Error นี้
-        });
-
         // Expose functions to global window object
         window.loginWithGoogle = () => {
             signInWithPopup(auth, provider)
@@ -686,7 +676,7 @@
         window.loginWithLine = () => {
             // ต้องตั้งค่า OpenID Connect ใน Firebase Console ก่อน (Provider ID: oidc.line)
             // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
-            const provider = new OAuthProvider('oidc.line');
+            const lineProvider = new OAuthProvider('oidc.line');
             
             // เปลี่ยนกลับมาใช้ Popup เพื่อแก้ปัญหา "missing initial state" บน Chrome/Localhost
             signInWithPopup(auth, lineProvider)
