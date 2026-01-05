@@ -1107,7 +1107,17 @@
     <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            OAuthProvider, 
+            signInWithRedirect, 
+            getRedirectResult, 
+            setPersistence, 
+            browserLocalPersistence, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn1kmZMqB3oA7S3in8Oe-HH0dJCW95ABY",
@@ -1121,51 +1131,43 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
-        // 1. บังคับใช้ Local Storage เพื่อลดปัญหา Session หาย
+        
+        // 1. บังคับใช้ Local Storage
         setPersistence(auth, browserLocalPersistence).catch(console.error);
 
-        // Expose functions to global window object
+        /* ---------- Google ---------- */
         window.loginWithGoogle = () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    toggleAuthModal();
-                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }).catch((error) => {
-                    console.error(error);
-                    if (error.message.includes("missing initial state") || error.code === "auth/popup-blocked") {
-                        showToast("Login Issue", "Please open in Chrome/Safari app.");
-                    } else {
-                        showToast("Login Failed", "Please try again.");
-                    }
-                });
+            const provider = new GoogleAuthProvider();
+            signInWithRedirect(auth, provider);
         };
 
+        /* ---------- LINE ---------- */
         window.loginWithLine = () => {
-            // ต้องตั้งค่า OpenID Connect ใน Firebase Console ก่อน (Provider ID: oidc.line)
-            // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
-            const lineProvider = new OAuthProvider('oidc.line');
-            
-            // เปลี่ยนกลับมาใช้ Popup เพื่อแก้ปัญหา "missing initial state" บนมือถือ
-            signInWithPopup(auth, lineProvider)
-                .then((result) => {
-                    toggleAuthModal();
+            const provider = new OAuthProvider("oidc.line");
+            signInWithRedirect(auth, provider);
+        };
+
+        /* ---------- After Redirect ---------- */
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result && result.user) {
+                    // ปิด Modal ถ้าเปิดอยู่
+                    const authModal = document.getElementById("authModal");
+                    if(authModal) {
+                        authModal.classList.add("hidden");
+                        authModal.classList.remove("flex");
+                    }
                     showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }).catch((error) => {
-                    console.error("Line Login Error:", error);
-                    showToast("Login Failed", "Please try opening in Chrome/Safari.");
-                });
-        };
+                }
+            })
+            .catch(console.error);
 
+        /* ---------- Logout ---------- */
         window.handleLogout = () => {
-            if(confirm("Are you sure you want to logout?")) {
-                signOut(auth).then(() => {
-                    showToast("Logged Out", "See you next time!");
-                });
-            }
+            signOut(auth).then(() => location.reload());
         };
 
+        /* ---------- Auth State Listener (UI Updates) ---------- */
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('navLoginBtn');
             const userProfile = document.getElementById('navUserProfile');
@@ -1177,12 +1179,12 @@
                 if(userProfile) {
                     userProfile.classList.remove('hidden');
                     userProfile.classList.add('flex');
-                    document.getElementById('userAvatar').src = user.photoURL;
-                    document.getElementById('userName').innerText = user.displayName.split(' ')[0];
+                    document.getElementById('userAvatar').src = user.photoURL || "images/default-avatar.png";
+                    document.getElementById('userName').innerText = user.displayName || "User";
                 }
                 if(mobileLogin) {
-                    mobileLogin.innerText = "Logout (" + user.displayName.split(' ')[0] + ")";
-                    mobileLogin.onclick = () => { window.handleLogout(); toggleMobileMenu(); };
+                    mobileLogin.innerText = "Logout (" + (user.displayName ? user.displayName.split(' ')[0] : 'User') + ")";
+                    mobileLogin.onclick = () => { window.handleLogout(); };
                 }
             } else {
                 if(loginBtn) loginBtn.classList.remove('!hidden');
