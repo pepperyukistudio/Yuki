@@ -663,19 +663,6 @@
         // 1. บังคับใช้ Local Storage เพื่อลดปัญหา Session หาย
         setPersistence(auth, browserLocalPersistence).catch(console.error);
 
-        // 2. รับค่าเมื่อ Redirect กลับมา (สำหรับ LINE Login)
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-            }
-        }).catch((error) => {
-            console.error("Redirect Error:", error);
-            // ดักจับ Error เฉพาะตัวนี้ เพื่อไม่ให้ User ตกใจ
-            if (error.message.includes("missing initial state")) {
-                showToast("Browser Issue", "Please open in Chrome/Safari.");
-            }
-        });
-
         // Expose functions to global window object
         window.loginWithGoogle = () => {
             signInWithPopup(auth, provider)
@@ -697,8 +684,15 @@
             // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
             const lineProvider = new OAuthProvider('oidc.line');
             
-            // 3. ใช้ Redirect สำหรับ LINE (ดีกว่าบนมือถือ)
-            signInWithRedirect(auth, lineProvider);
+            // เปลี่ยนกลับมาใช้ Popup เพื่อแก้ปัญหา "missing initial state" บนมือถือ
+            signInWithPopup(auth, lineProvider)
+                .then((result) => {
+                    toggleAuthModal();
+                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+                }).catch((error) => {
+                    console.error("Line Login Error:", error);
+                    showToast("Login Failed", "Please try opening in Chrome/Safari.");
+                });
         };
 
         window.handleLogout = () => {
