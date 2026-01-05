@@ -1107,7 +1107,7 @@
     <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn1kmZMqB3oA7S3in8Oe-HH0dJCW95ABY",
@@ -1122,6 +1122,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+
+        // Handle Redirect Result (สำหรับรับค่าตอนเด้งกลับมาจากหน้า Login ในมือถือ)
+        getRedirectResult(auth).then((result) => {
+            if (result) {
+                showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+            }
+        }).catch((error) => {
+            console.error(error);
+            alert("Login Error: " + error.message);
+        });
 
         // Expose functions to global window object
         window.loginWithGoogle = () => {
@@ -1140,14 +1150,8 @@
             // ต้องตั้งค่า OpenID Connect ใน Firebase Console ก่อน (Provider ID: oidc.line)
             // และนำ Callback URL นี้ไปใส่ใน LINE Developers: https://pepper-yuki.firebaseapp.com/__/auth/handler
             const provider = new OAuthProvider('oidc.line');
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    toggleAuthModal();
-                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }).catch((error) => {
-                    console.error(error);
-                    alert("Line Login Error: " + error.message + "\n(อย่าลืมตั้งค่า OpenID Connect ใน Firebase Console)");
-                });
+            // ใช้ Redirect แทน Popup เพื่อแก้ปัญหาบนมือถือ
+            signInWithRedirect(auth, provider);
         };
 
         window.handleLogout = () => {
