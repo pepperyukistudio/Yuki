@@ -645,17 +645,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { 
-            getAuth, 
-            GoogleAuthProvider, 
-            OAuthProvider, 
-            signInWithRedirect, 
-            getRedirectResult, 
-            setPersistence, 
-            browserLocalPersistence, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBn1kmZMqB3oA7S3in8Oe-HH0dJCW95ABY",
@@ -672,79 +661,53 @@
         const provider = new GoogleAuthProvider();
 
         // 1. บังคับใช้ Local Storage เพื่อลดปัญหา Session หาย
-        
-        // 1. บังคับใช้ Local Storage
         setPersistence(auth, browserLocalPersistence).catch(console.error);
 
-        // 2. รับค่าเมื่อ Redirect กลับมา (สำหรับ LINE Login)
+        // 2. รับค่าเมื่อ Redirect กลับมา
         getRedirectResult(auth).then((result) => {
             if (result) {
                 showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+                // ปิด Modal ถ้าเปิดอยู่
+                const modal = document.getElementById('authModal');
+                if (!modal.classList.contains('hidden')) {
+                    toggleAuthModal();
+                }
             }
         }).catch((error) => {
-            console.error("Redirect Error:", error);
-            if (error.message.includes("missing initial state")) {
-                showToast("Browser Issue", "Please open in Chrome/Safari.");
+            console.error(error);
+            if (error.code === 'auth/missing-initial-state' || error.message.includes("missing initial state")) {
+                showToast("Login Issue", "Please open in Chrome/Safari app.");
+            } else {
+                showToast("Login Failed", "Please try again.");
             }
         });
 
         // Expose functions to global window object
-        /* ---------- Google ---------- */
         window.loginWithGoogle = () => {
-            if (/Android|iPhone/i.test(navigator.userAgent)) {
-                signInWithRedirect(auth, provider);
-            } else {
-                signInWithPopup(auth, provider)
-                    .then((result) => {
-                        toggleAuthModal();
-                        showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                    }).catch((error) => {
-                        console.error(error);
-                        if (error.message.includes("missing initial state") || error.code === "auth/popup-blocked") {
-                            showToast("Login Issue", "Please open in Chrome/Safari app.");
-                        } else {
-                            showToast("Login Failed", "Please try again.");
-                        }
-                    });
-            }
-            const provider = new GoogleAuthProvider();
-            signInWithRedirect(auth, provider);
+            // ใช้ Popup สำหรับ Google (เสถียรกว่า Redirect บน Desktop/Localhost)
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    toggleAuthModal();
+                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+                }).catch((error) => {
+                    console.error("Google Login Error:", error);
+                    showToast("Login Failed", "Please try again.");
+                });
         };
 
-        /* ---------- LINE ---------- */
         window.loginWithLine = () => {
             const lineProvider = new OAuthProvider('oidc.line');
             signInWithRedirect(auth, lineProvider);
-            const provider = new OAuthProvider("oidc.line");
-            signInWithRedirect(auth, provider);
         };
 
-        /* ---------- After Redirect ---------- */
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result && result.user) {
-                    // ปิด Modal ถ้าเปิดอยู่
-                    const authModal = document.getElementById("authModal");
-                    if(authModal) {
-                        authModal.classList.add("hidden");
-                        authModal.classList.remove("flex");
-                    }
-                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-                }
-            })
-            .catch(console.error);
-
-        /* ---------- Logout ---------- */
         window.handleLogout = () => {
             if(confirm("Are you sure you want to logout?")) {
                 signOut(auth).then(() => {
                     showToast("Logged Out", "See you next time!");
                 });
             }
-            signOut(auth).then(() => location.reload());
         };
 
-        /* ---------- Auth State Listener (UI Updates) ---------- */
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('navLoginBtn');
             const userProfile = document.getElementById('navUserProfile');
@@ -752,20 +715,19 @@
             window.isUserLoggedIn = !!user;
 
             if (user) {
+                const displayName = user.displayName || "Friend";
+                const photoURL = user.photoURL || "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+
                 if(loginBtn) loginBtn.classList.add('!hidden');
                 if(userProfile) {
                     userProfile.classList.remove('hidden');
                     userProfile.classList.add('flex');
-                    document.getElementById('userAvatar').src = user.photoURL;
-                    document.getElementById('userName').innerText = user.displayName.split(' ')[0];
-                    document.getElementById('userAvatar').src = user.photoURL || "images/default-avatar.png";
-                    document.getElementById('userName').innerText = user.displayName || "User";
+                    document.getElementById('userAvatar').src = photoURL;
+                    document.getElementById('userName').innerText = displayName.split(' ')[0];
                 }
                 if(mobileLogin) {
-                    mobileLogin.innerText = "Logout (" + user.displayName.split(' ')[0] + ")";
+                    mobileLogin.innerText = "Logout (" + displayName.split(' ')[0] + ")";
                     mobileLogin.onclick = () => { window.handleLogout(); toggleMobileMenu(); };
-                    mobileLogin.innerText = "Logout (" + (user.displayName ? user.displayName.split(' ')[0] : 'User') + ")";
-                    mobileLogin.onclick = () => { window.handleLogout(); };
                 }
             } else {
                 if(loginBtn) loginBtn.classList.remove('!hidden');
@@ -782,5 +744,3 @@
     </script>
 </body>
 </html>
-
-
