@@ -315,10 +315,10 @@
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
                         Continue with Google
                     </button>
-                    <button type="button" onclick="loginWithLine()" class="w-full btn-google py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-3 text-[#06C755] mt-3 hover:bg-[#06C755]/5 border-[#06C755]/20">
+                    <a href="https://lin.ee/WCHFC3j" target="_blank" class="w-full btn-google py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-3 text-[#06C755] mt-3 hover:bg-[#06C755]/5 border-[#06C755]/20">
                         <i class="fa-brands fa-line text-xl"></i>
-                        Continue with LINE
-                    </button>
+                        Chat with Artist
+                    </a>
                 </form>
             </div>
         </div>
@@ -675,11 +675,7 @@
             }
         }).catch((error) => {
             console.error(error);
-            if (error.code === 'auth/missing-initial-state' || error.message.includes("missing initial state")) {
-                showToast("Login Issue", "Please open in Chrome/Safari app.");
-            } else {
-                showToast("Login Failed", "Please try again.");
-            }
+            showToast("Login Failed", "Please try again.");
         });
 
         // Expose functions to global window object
@@ -693,11 +689,6 @@
                     console.error("Google Login Error:", error);
                     showToast("Login Failed", "Please try again.");
                 });
-        };
-
-        window.loginWithLine = () => {
-            const lineProvider = new OAuthProvider('oidc.line');
-            signInWithRedirect(auth, lineProvider);
         };
 
         window.handleLogout = () => {
