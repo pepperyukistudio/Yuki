@@ -1123,16 +1123,6 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // Handle Redirect Result (สำหรับรับค่าตอนเด้งกลับมาจากหน้า Login ในมือถือ)
-        getRedirectResult(auth).then((result) => {
-            if (result) {
-                showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
-            }
-        }).catch((error) => {
-            console.error(error);
-            // alert("Login Error: " + error.message); // ปิดการแจ้งเตือน Error นี้ เพื่อไม่ให้เด้งกวนใจตอนโหลดหน้า
-        });
-
         // Expose functions to global window object
         window.loginWithGoogle = () => {
             signInWithPopup(auth, provider)
