@@ -1159,7 +1159,14 @@
 
         window.loginWithLine = () => {
             const lineProvider = new OAuthProvider('oidc.line');
-            signInWithRedirect(auth, lineProvider);
+            signInWithPopup(auth, lineProvider)
+                .then((result) => {
+                    toggleAuthModal();
+                    showToast("Welcome Back!", `Hello, ${result.user.displayName}`);
+                }).catch((error) => {
+                    console.error("LINE Login Error:", error);
+                    showToast("Login Failed", "Please try again.");
+                });
         };
 
         window.handleLogout = () => {
